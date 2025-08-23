@@ -127,3 +127,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/*
+* app
+*/
+
+html,
+body {
+  background-color: rgb(250, 250, 250);
+}
