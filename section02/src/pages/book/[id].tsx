@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import fetchBook from "../../lib/fetch-book";
 import style from "./[id].module.css";
-import fetchBook from "@/lib/fetch-book";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -29,19 +30,27 @@ export default function Page({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
-      <div
-        className={style.cover_img_container}
-        style={{ backgroundImage: `url('${coverImgUrl}')` }}
-      >
-        <img src={coverImgUrl} alt="cover" />
+    <>
+      <Head>
+        <title>onebite books | {title}</title>
+        <meta property="og:image" content={coverImgUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+      </Head>
+      <div className={style.container}>
+        <div
+          className={style.cover_img_container}
+          style={{ backgroundImage: `url('${coverImgUrl}')` }}
+        >
+          <img src={coverImgUrl} alt="cover" />
+        </div>
+        <div className={style.title}>{title}</div>
+        <div className={style.subTitle}>{subTitle}</div>
+        <div className={style.author}>
+          {author} | {publisher}
+        </div>
+        <div className={style.description}>{description}</div>
       </div>
-      <div className={style.title}>{title}</div>
-      <div className={style.subTitle}>{subTitle}</div>
-      <div className={style.author}>
-        {author} | {publisher}
-      </div>
-      <div className={style.description}>{description}</div>
-    </div>
+    </>
   );
 }
