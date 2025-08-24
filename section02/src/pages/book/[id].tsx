@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import style from "./[id].module.css";
 import fetchBook from "@/lib/fetch-book";
@@ -8,6 +9,13 @@ export const getServerSideProps = async (
   const id = context.params!.id;
 
   const book = await fetchBook(Number(id));
+
+  if (!book) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       book,
@@ -18,10 +26,7 @@ export const getServerSideProps = async (
 export default function Page({
   book,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  if (!book) return "문제가 발생하였습니다.";
-
-  const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-    book;
+  const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
     <div className={style.container}>

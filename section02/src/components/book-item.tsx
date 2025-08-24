@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { BookData } from "../types";
 import Link from "next/link";
 import style from "./book-item.module.css";
@@ -6,7 +7,7 @@ export default function BookItem({
   id,
   title,
   subTitle,
-  description,
+  // description,
   author,
   publisher,
   coverImgUrl,
