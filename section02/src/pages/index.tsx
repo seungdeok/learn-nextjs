@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
-import { InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
 import SearchableLayout from "../components/searchable-layout";
 import BookItem from "../components/book-item";
 import fetchBooks from "../lib/fetch-books";
 import fetchRandomBooks from "../lib/fetch-random-books";
 import style from "./index.module.css";
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const [books, recommendBooks] = await Promise.all([
     fetchBooks(),
     fetchRandomBooks(),
@@ -17,13 +17,14 @@ export const getServerSideProps = async () => {
       books,
       recommendBooks,
     },
+    revalidate: 60, // 1m
   };
 };
 
 export default function Page({
   books,
   recommendBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={style.container}>
       <section>
