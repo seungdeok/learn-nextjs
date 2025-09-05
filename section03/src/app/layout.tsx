@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 };
 
 async function Footer() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {
+    cache: 'force-cache'
+  });
   if (!response.ok) {
     return <div>오류가 발생했습니다.</div>
   }
