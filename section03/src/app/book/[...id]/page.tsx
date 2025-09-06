@@ -1,14 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { BookData } from "@/types";
+import { BookData, ReviewData } from "@/types";
 import style from "./page.module.css";
+import ReviewItem from "@/components/review-item";
+import { ReviewEditor } from "@/components/review-editor";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ id: string | string[] }>;
-}) {
-  const { id } = await params;
+async function BookContent({ id }: { id: string }) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`);
   
   if (!response.ok) {
@@ -19,7 +16,7 @@ export default async function Page({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
+    <section>
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
@@ -32,6 +29,38 @@ export default async function Page({
         {author} | {publisher}
       </div>
       <div className={style.description}>{description}</div>
+    </section>
+  );
+}
+
+async function ReviewList({ id }: { id: string }) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review/book/${id}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch reviews');
+  }
+
+  const reviews: ReviewData[] = await response.json();
+  return (
+    <section>
+      {reviews.map((review) => (
+        <ReviewItem key={`review-item-${review.id}`} {...review} />
+      ))}
+    </section>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return (
+    <div className={style.container}>
+      <BookContent id={id} />
+      <ReviewEditor id={id} />
+      <ReviewList id={id} />
     </div>
   );
 }
