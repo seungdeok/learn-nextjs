@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidateTag } from "next/cache";
+
 export async function createReviewAction(formData: FormData) {
   const bookId = formData.get('id')?.toString();
   const content = formData.get('content')?.toString();
@@ -14,6 +16,9 @@ export async function createReviewAction(formData: FormData) {
       method: 'POST',
       body: JSON.stringify({ content, author, bookId }),
     });
+
+    // revalidatePath(`/book/${bookId}`);
+    revalidateTag(`book-${bookId}-reviews`);
   } catch (error) {
     console.error(error);
   }
