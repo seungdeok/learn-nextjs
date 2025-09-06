@@ -4,6 +4,19 @@ import { BookData } from "@/types";
 import { delay } from "@/utils/delay";
 import { Suspense } from "react";
 
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await searchParams;
+  return {
+    title: `ONEBITE BOOKS | 검색결과: ${q}`,
+    description: `검색결과: ${q}`,
+    openGraph: {
+      title: `ONEBITE BOOKS | 검색결과: ${q}`,
+      description: `검색결과: ${q}`,
+      images: ["/thumbnail.png"],
+    },
+  }
+}
+
 async function SearchContent({ q }: { q: string }) {
   await delay(1000);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/search?q=${q}`);

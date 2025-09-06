@@ -1,6 +1,17 @@
 import BookItem from "@/components/book-item";
 import style from "./page.module.css";
 import { BookData } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ONEBITE BOOKS | 모든 도서",
+  description: "등록된 모든 도서들을 만나보세요",
+  openGraph: {
+    title: "ONEBITE BOOKS | 모든 도서",
+    description: "등록된 모든 도서들을 만나보세요",
+    images: ["/thumbnail.png"],
+  },
+}
 
 async function Books() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {

@@ -4,6 +4,27 @@ import ReviewItem from "@/components/review-item";
 import { ReviewEditor } from "@/components/review-editor";
 import Image from "next/image";
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch book');
+  }
+
+  const book: BookData = await response.json();
+
+  return {
+    title: `ONEBITE BOOKS | 도서 상세: ${book.title}`,
+    description: `${book.description}`,
+    openGraph: {
+      title: `ONEBITE BOOKS | 도서 상세: ${book.title}`,
+      description: `${book.description}`,
+      images: [book.coverImgUrl],
+    },
+  }
+}
+
 async function BookContent({ id }: { id: string }) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`);
   
